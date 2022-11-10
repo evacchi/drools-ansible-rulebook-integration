@@ -1,6 +1,8 @@
 package org.drools.ansible.rulebook.integration.api.domain;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -45,6 +47,21 @@ public class RulesSet {
     public RulesSet withOptions(RuleNotation.RuleConfigurationOption[] options) {
         this.options = options;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RulesSet rulesSet = (RulesSet) o;
+        return Objects.equals(name, rulesSet.name) && Objects.equals(hosts, rulesSet.hosts) && Objects.equals(rules, rulesSet.rules) && Arrays.equals(options, rulesSet.options);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(name, hosts, rules);
+        result = 31 * result + Arrays.hashCode(options);
+        return result;
     }
 
     @Override

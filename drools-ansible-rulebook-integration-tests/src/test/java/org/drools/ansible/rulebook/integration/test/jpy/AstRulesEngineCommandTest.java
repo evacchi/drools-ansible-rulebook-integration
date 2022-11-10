@@ -1,10 +1,12 @@
 package org.drools.ansible.rulebook.integration.test.jpy;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.drools.ansible.rulebook.integration.api.domain.RulesSet;
 import org.drools.ansible.rulebook.integration.core.jpy.AstRulesEngineCommand;
 import org.drools.ansible.rulebook.integration.core.jpy.AstRulesEngineCommand.*;
 import org.junit.Test;
 
+import java.util.List;
 import java.util.Map;
 
 import static org.drools.ansible.rulebook.integration.api.RulesExecutor.OBJECT_MAPPER;
@@ -14,10 +16,12 @@ public class AstRulesEngineCommandTest {
 
     @Test
     public void testCreateRulesetDeSerialization() throws JsonProcessingException {
-        AstRulesEngineCommand createRuleset = new CreateRuleset(
-                Map.of("some", "value"));
+        RulesSet rulesSet = new RulesSet();
+        rulesSet.setName("test");
+        rulesSet.setRules(List.of());
+        AstRulesEngineCommand createRuleset = new CreateRuleset(rulesSet);
         String result = OBJECT_MAPPER.writeValueAsString(createRuleset);
-        String expected = "{\"command\":\"create-ruleset\",\"ruleset\":{\"some\":\"value\"}}";
+        String expected = "{\"command\":\"create-ruleset\",\"ruleset\":{\"name\":\"test\",\"hosts\":null,\"rules\":[],\"options\":null}}";
         assertEquals(expected, result);
 
         AstRulesEngineCommand deserialized = OBJECT_MAPPER.readValue(expected, CreateRuleset.class);

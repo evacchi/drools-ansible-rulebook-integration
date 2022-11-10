@@ -114,8 +114,12 @@ public class RulesExecutor {
         return retractFact( new JSONObject(json).toMap() ) ? rulesExecutorSession.fireAllRules() : 0;
     }
 
+    public List<Match> processRetract(Map<String, Object> fact) {
+        return retractFact( fact ) ? findMatchedRules() : Collections.emptyList();
+    }
+
     public List<Match> processRetract(String json) {
-        return retractFact( new JSONObject(json).toMap() ) ? findMatchedRules() : Collections.emptyList();
+        return processRetract( new JSONObject(json).toMap() );
     }
 
     public boolean retractFact(Map<String, Object> factMap) {

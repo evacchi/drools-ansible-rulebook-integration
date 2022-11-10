@@ -4,9 +4,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import org.drools.ansible.rulebook.integration.api.domain.RulesSet;
 
 import java.util.Map;
 import java.util.Objects;
+
+import static org.drools.ansible.rulebook.integration.api.RulesExecutor.OBJECT_MAPPER;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "command")
 @JsonSubTypes({
@@ -20,20 +23,23 @@ import java.util.Objects;
 public interface AstRulesEngineCommand {
     public final class CreateRuleset implements AstRulesEngineCommand {
         @JsonProperty("ruleset")
-        private Map<String, Object> ruleset;
+        private RulesSet ruleset;
 
         public CreateRuleset() {
         }
 
+        public CreateRuleset(RulesSet ruleset) {
+            this.ruleset = ruleset;
+        }
         public CreateRuleset(Map<String, Object> ruleset) {
+            this.ruleset = OBJECT_MAPPER.convertValue(ruleset, RulesSet.class);
+        }
+
+        public void setRuleset(RulesSet ruleset) {
             this.ruleset = ruleset;
         }
 
-        public void setRuleset(Map<String, Object> ruleset) {
-            this.ruleset = ruleset;
-        }
-
-        public Map<String, Object> getRuleset() {
+        public RulesSet getRuleset() {
             return ruleset;
         }
 
